@@ -1,7 +1,9 @@
 import pygame as pg
+from pongapp.utils import *
+
 
 class Raqueta:
-    def __init__(self, pos_x, pos_y, color=(255,255,255), w=20, h=120):
+    def __init__(self, pos_x, pos_y, color=COLOR_BLANCO, w=20, h=120):
         self.pos_x = pos_x
         self.pos_y = pos_y
         self.color = color
@@ -11,13 +13,13 @@ class Raqueta:
     def dibujar(self, surface):
         pg.draw.rect(surface, self.color, (self.pos_x, self.pos_y-(self.h//2), self.w, self.h))  #Las divisiones en la posicion del draw son para que se dibuje en el medio de la pantalla
 
-    def mover(self, tecaldo_arriba, teclado_abajo):        
+    def mover(self, tecaldo_arriba, teclado_abajo, y_max=ALTO, y_min=ALTO_MIN):        
         estado_teclado = pg.key.get_pressed()      
 
-        if estado_teclado[tecaldo_arriba] == True and self.pos_y >= 0+(self.h//2): #Se suma y resta el h//2 ya que la posicion de los objetos se mide desde el centro del obj. Hay que sumarle la mitad del objeto para que los bordes sean los que marquen el limite
+        if estado_teclado[tecaldo_arriba] == True and self.pos_y >= y_min+(self.h//2): #Se suma y resta el h//2 ya que la posicion de los objetos se mide desde el centro del obj. Hay que sumarle la mitad del objeto para que los bordes sean los que marquen el limite
             self.pos_y -= 1
 
-        if estado_teclado[teclado_abajo] == True and self.pos_y <= 600-(self.h//2):
+        if estado_teclado[teclado_abajo] == True and self.pos_y <= y_max-(self.h//2):
             self.pos_y += 1
 
     @property  #Me permite llamar a los metodos/funciones sin usar (). Tiene que ir pegado al metodo al que se lo quiero aplicar
@@ -38,7 +40,7 @@ class Raqueta:
 
 
 class Pelota:
-    def __init__(self, pos_x, pos_y, color=(255,255,255), radio=5, vx=1, vy=1) -> None:
+    def __init__(self, pos_x, pos_y, color=COLOR_BLANCO, radio=15, vx=1, vy=1):
         self.pos_x = pos_x
         self.pos_y = pos_y
         self.color = color
@@ -51,7 +53,7 @@ class Pelota:
     def dibujar(self, surface):
         pg.draw.circle(surface, self.color, (self.pos_x, self.pos_y), self.radio)
 
-    def mover(self, x_max=800, y_max=600):
+    def mover(self, x_max=ANCHO, y_max=ALTO):
         self.pos_x += self.vx  #Esto hace que se mueva de manera automatica por los ejes
         self.pos_y += self.vy
 
@@ -77,11 +79,15 @@ class Pelota:
         
     def mostrar_marcador(self, pantalla):
         #fuente = pg.font.SysFont("verdana", 30)  #SysFont toma fuentes del sistema
-        fuente = pg.font.Font(None, 30)  #Font toma fuentes de un archivo que las contenga
-        marcador1 = fuente.render(str(self.contadorDerecho), True, (255,255,255))  #El .render  devuelve un objeto de tipo surface, que muestra un str seteado con demas parametros
-        marcador2 = fuente.render(str(self.contadorIzquierdo), True, (255,255,255))
-        pantalla.blit(marcador1, (330,20))  #Blit muestra un objeto de tipo surface en una coordenada
-        pantalla.blit(marcador2, (450,20))
+        fuente = pg.font.Font(None,30)  #Font toma fuentes de un archivo que las contenga
+        marcador1 = fuente.render(str(self.contadorDerecho), True, COLOR_AZUL)  #El .render  devuelve un objeto de tipo surface, que muestra un str seteado con demas parametros
+        marcador2 = fuente.render(str(self.contadorIzquierdo), True, COLOR_NARANJA)
+        jugador1 = fuente.render("Jugador 1", True, COLOR_AZUL)
+        jugador2 = fuente.render("Jugador 2", True, COLOR_NARANJA)
+        pantalla.blit(marcador1, (335,35))  #Blit muestra un objeto de tipo surface en una coordenada
+        pantalla.blit(marcador2, (450,35))
+        pantalla.blit(jugador1, (295,10))
+        pantalla.blit(jugador2, (410,10))
     
     @property 
     def derecha(self):
