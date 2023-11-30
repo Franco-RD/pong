@@ -60,6 +60,7 @@ class Pelota:
             self.pos_x = x_max//2  #Esto es para que despues de un gol salga del centro la pelota. Se lo tenemos que dejar para que no rebote por atras de la raqueta y siga metiendo puntos
             self.pos_y = y_max//2
             self.vx *= -1
+            self.vy *= -1
             self.contadorDerecho += 1
         
         #Colision limite izquierdo
@@ -67,6 +68,7 @@ class Pelota:
             self.pos_x = x_max//2
             self.pos_y = y_max//2
             self.vx *= -1
+            self.vy *= -1
             self.contadorIzquierdo += 1
 
         #Colision vertical
@@ -96,5 +98,14 @@ class Pelota:
     @property
     def abajo(self):
         return self.pos_y + self.radio
+    
+    def comprobar_choque(self, r1, r2):
+        if self.derecha >= r2.izquierda and self.izquierda <= r2.derecha and self.abajo >= r2.arriba and self.arriba <= r2.abajo:
+            self.vx *= -1
+        if self.derecha >= r1.izquierda and self.izquierda <= r1.derecha and self.abajo >= r1.arriba and self.arriba <= r1.abajo:
+            self.vx *= -1
 
-        
+    def comprobar_choqueV2(self, *raquetas):  #Hecho con parametro *args para ahorrar codigo
+         for r in raquetas:
+              if self.derecha >= r.izquierda and self.izquierda <= r.derecha and self.abajo >= r.arriba and self.arriba <= r.abajo:
+                  self.vx *= -1

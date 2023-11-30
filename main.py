@@ -1,7 +1,7 @@
 import pygame as pg
 from figura_class import *
 
-pg.init()
+pg.init()  #De pg.init a pg.quit es una pantalla
 
 #Definicion de la pantalla
 pantalla_principal = pg.display.set_mode((800, 600))
@@ -51,12 +51,7 @@ while game_over:
     pelota.mover()
 
     #Colision
-    if pelota.derecha >= raqueta2.izquierda and pelota.izquierda <= raqueta2.derecha and pelota.abajo >= raqueta2.arriba and pelota.arriba <= raqueta2.abajo:
-        pelota.vx *= -1
-    if pelota.derecha >= raqueta1.izquierda and pelota.izquierda <= raqueta1.derecha and pelota.abajo >= raqueta1.arriba and pelota.arriba <= raqueta1.abajo:
-        pelota.vx *= -1
-    
-    
+    pelota.comprobar_choqueV2(raqueta1, raqueta2)
 
     #Color del texto   
     pelota.mostrar_marcador(pantalla_principal)
