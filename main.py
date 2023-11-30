@@ -12,11 +12,6 @@ tasa_refresco = pg.time.Clock()  #Definir un objeto tipo clock para poder config
 
 #Agregar marcadores
 #Fuente y tamaño de letra
-#marcador1_font = pg.font.SysFont("verdana", 30)  #SysFont toma parametros del sistema
-#marcador2_font = pg.font.SysFont("verdana", 30)
-marcador1_font = pg.font.Font(None, 30)  #Font toma fuentes de un archivo que las contenga
-marcador2_font = pg.font.Font(None, 30)
-
 jugador1_font = pg.font.SysFont("verdana", 10,True)
 jugador2_font = pg.font.SysFont("verdana", 10,True)
 
@@ -24,8 +19,8 @@ jugador2_font = pg.font.SysFont("verdana", 10,True)
 
 #Definicion de objetos para el juego
 pelota = Pelota(400, 300, (228,231,19), 10)
-raqueta1 = Raqueta(10, 300)  #Raqueta izquierda
-raqueta2 = Raqueta(790, 300)  #raqueta derecha
+raqueta1 = Raqueta(0, 300)  #Raqueta izquierda
+raqueta2 = Raqueta(780, 300)  #raqueta derecha
 
 
 #Bucle del juego principal, el juego corre hasta que se toca cerrar
@@ -54,6 +49,13 @@ while game_over:
     raqueta1.mover(pg.K_w, pg.K_s)
     raqueta2.mover(pg.K_UP, pg.K_DOWN)
     pelota.mover()
+
+    #Colision
+    if pelota.derecha >= raqueta2.izquierda and pelota.izquierda <= raqueta2.derecha and pelota.abajo >= raqueta2.arriba and pelota.arriba <= raqueta2.abajo:
+        pelota.vx *= -1
+    if pelota.derecha >= raqueta1.izquierda and pelota.izquierda <= raqueta1.derecha and pelota.abajo >= raqueta1.arriba and pelota.arriba <= raqueta1.abajo:
+        pelota.vx *= -1
+    
     
 
     #Color del texto   
