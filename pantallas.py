@@ -17,7 +17,7 @@ class Partida:  #Clase para generar pantallas
         self.raqueta2 = Raqueta(780, ALTO//2)  #raqueta derecha
 
         #self.fuente = pg.font.SysFont("verdana", 30)  #SysFont toma fuentes del sistema   
-        self.fuente = pg.font.Font(None,30)  #Font toma fuentes de un archivo que las contenga
+        self.fuente = pg.font.Font("pongapp/fonts/PresStart2P.ttf",15)  #Font toma fuentes de un archivo que las contenga, o None para que vaya con una predeterminada
 
         self.contadorDerecho = 0
         self.contadorIzquierdo = 0
@@ -49,15 +49,10 @@ class Partida:  #Clase para generar pantallas
             self.raqueta1.mover(pg.K_w, pg.K_s)
             self.raqueta2.mover(pg.K_UP, pg.K_DOWN)   
 
-            self.mostrar_marcador()
-            
+            self.mostrar_marcador()            
 
             #Colision
-            self.pelota.comprobar_choqueV2(self.raqueta1, self.raqueta2)
-
-             
-            #self.pelota.mostrar_marcador(self.pantalla_principal)  ahora esta en esta misma clase
-                      
+            self.pelota.comprobar_choqueV2(self.raqueta1, self.raqueta2)                      
 
             pg.display.flip()
         pg.quit()
@@ -69,8 +64,8 @@ class Partida:  #Clase para generar pantallas
     def mostrar_jugadores(self):                     
         jugador1 = self.fuente.render("Jugador 1", True, COLOR_AZUL)
         jugador2 = self.fuente.render("Jugador 2", True, COLOR_NARANJA)        
-        self.pantalla_principal.blit(jugador1, (295,10))
-        self.pantalla_principal.blit(jugador2, (410,10))
+        self.pantalla_principal.blit(jugador1, (250,10))
+        self.pantalla_principal.blit(jugador2, (420,10))
 
     def mostrar_marcador(self):
         self.quienMarco = self.pelota.mover()  #Se asigna el return str del metodo mover del objeto Pelota a una variable para ver quien metio un punto y utilizar el contador en esta clase. 
@@ -81,5 +76,5 @@ class Partida:  #Clase para generar pantallas
 
         marcador1 = self.fuente.render(str(self.contadorDerecho), True, COLOR_AZUL)  #El .render  devuelve un objeto de tipo surface, que muestra un str seteado con demas parametros
         marcador2 = self.fuente.render(str(self.contadorIzquierdo), True, COLOR_NARANJA)        
-        self.pantalla_principal.blit(marcador1, (335,35))  #Blit muestra un objeto de tipo surface en una coordenada
-        self.pantalla_principal.blit(marcador2, (450,35))
+        self.pantalla_principal.blit(marcador1, (305,35))  #Blit muestra un objeto de tipo surface en una coordenada
+        self.pantalla_principal.blit(marcador2, (475,35))
