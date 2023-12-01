@@ -47,8 +47,7 @@ class Pelota:
         self.radio = radio
         self.vx = vx
         self.vy = vy
-        self.contadorDerecho = 0
-        self.contadorIzquierdo = 0
+      
     
     def dibujar(self, surface):
         pg.draw.circle(surface, self.color, (self.pos_x, self.pos_y), self.radio)
@@ -63,7 +62,7 @@ class Pelota:
             self.pos_y = y_max//2
             self.vx *= -1
             self.vy *= -1
-            self.contadorDerecho += 1
+            return "right"
         
         #Colision limite izquierdo
         if self.pos_x <= 0-self.radio*10: 
@@ -71,23 +70,21 @@ class Pelota:
             self.pos_y = y_max//2
             self.vx *= -1
             self.vy *= -1
-            self.contadorIzquierdo += 1
+            return "left"
 
         #Colision vertical
         if self.pos_y >= y_max or self.pos_y <=  0 :
             self.vy *= -1
-        
+    
+    '''
     def mostrar_marcador(self, pantalla):
         #fuente = pg.font.SysFont("verdana", 30)  #SysFont toma fuentes del sistema
         fuente = pg.font.Font(None,30)  #Font toma fuentes de un archivo que las contenga
         marcador1 = fuente.render(str(self.contadorDerecho), True, COLOR_AZUL)  #El .render  devuelve un objeto de tipo surface, que muestra un str seteado con demas parametros
-        marcador2 = fuente.render(str(self.contadorIzquierdo), True, COLOR_NARANJA)
-        jugador1 = fuente.render("Jugador 1", True, COLOR_AZUL)
-        jugador2 = fuente.render("Jugador 2", True, COLOR_NARANJA)
+        marcador2 = fuente.render(str(self.contadorIzquierdo), True, COLOR_NARANJA)        
         pantalla.blit(marcador1, (335,35))  #Blit muestra un objeto de tipo surface en una coordenada
         pantalla.blit(marcador2, (450,35))
-        pantalla.blit(jugador1, (295,10))
-        pantalla.blit(jugador2, (410,10))
+    '''
     
     @property 
     def derecha(self):
