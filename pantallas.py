@@ -22,21 +22,28 @@ class Partida:  #Clase para generar pantallas
         self.contadorDerecho = 0
         self.contadorIzquierdo = 0
         self.quienMarco = ""
-    
-    def bucle_fotograma(self):
-        game_over = True
 
-        while game_over:
+        self.game_over = True
+        self.temporizador = TIEMPO_JUEGO #En milisegundos
+    
+    def bucle_fotograma(self):       
+
+        while self.game_over:
             
             #Obtener la tasa de refrescos en ms
             self.valor_tasa = self.tasa_refresco.tick(600)  #Variable para controlar la velocidad entre fotogramas. A menor numero entre () mas lento es. No hace falta asignarlo a una variable si no se va a usar
-            #print(self.valor_tasa)
+            #print(self.valor_tasa)   
+
+            self.temporizador -= self.valor_tasa  
 
             #Captura de eventos
             for evento in pg.event.get():
                 if evento.type == pg.QUIT:
-                    game_over = False    
+                    self.game_over = False     
+
+            self.finalizacion_de_juego()      
             
+
             #Seteo de pantalla, dibujo y movimiento de objetos
             self.pantalla_principal.fill(COLOR_PANTALLA)  #Color de pantalla
             self.mostrar_linea_central()
@@ -49,12 +56,14 @@ class Partida:  #Clase para generar pantallas
             self.raqueta1.mover(pg.K_w, pg.K_s)
             self.raqueta2.mover(pg.K_UP, pg.K_DOWN)   
 
-            self.mostrar_marcador()            
+            self.mostrar_marcador()   
+            self.mostrar_temporizador()         
 
             #Colision
             self.pelota.comprobar_choqueV2(self.raqueta1, self.raqueta2)                      
 
             pg.display.flip()
+
         pg.quit()
 
     def mostrar_linea_central(self):
@@ -78,3 +87,22 @@ class Partida:  #Clase para generar pantallas
         marcador2 = self.fuente.render(str(self.contadorIzquierdo), True, COLOR_NARANJA)        
         self.pantalla_principal.blit(marcador1, (305,35))  #Blit muestra un objeto de tipo surface en una coordenada
         self.pantalla_principal.blit(marcador2, (475,35))
+
+    def finalizacion_de_juego(self):    
+        #Finalizacion del juego por tiempo         
+        if self.temporizador <= 0:
+            print("Fin del juego")
+            self.game_over = False       
+
+        #Finalizacion de juego por puntos
+        if self.contadorDerecho == 7:
+            self.game_over = False
+            print("El ganador es el jugador 1")
+        if self.contadorIzquierdo == 7:
+            self.game_over = False
+            print("El ganador es el jugador 2")
+    
+    def mostrar_temporizador(self):
+        self.tiempo_juego = self.fuente.render(str(self.temporizador//1000), True, COLOR_ROJO)
+        self.pantalla_principal.blit(self.tiempo_juego, (395,10))
+            
