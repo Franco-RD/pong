@@ -1,5 +1,7 @@
 from figura_class import Raqueta, Pelota
 from pongapp.pantallas import Partida
+import pygame as pg
+
 """
 objetoRaqueta = Raqueta(0, 500)
 
@@ -22,7 +24,10 @@ def datosPersonales(*args):  #El parametro *args es para que una funcion pueda t
         print(datos)
 
 datosPersonales("Juan", "perez", 25, "algo")
-"""
+
 
 juego = Partida()
 juego.bucle_fotograma()
+"""
+
+musica = pg.mixer.music.load("C:\Users\Franco\Downloads\En este país ya nadie trabaja.mp3")

@@ -4,7 +4,7 @@ from pongapp.utils import *
 
 
 
-class Partida:  #Clase para generar pantallas
+class Partida:  #Clase para generar pantalla de partida
     def __init__(self):
         pg.init()
         #pg.font.init()
@@ -18,8 +18,8 @@ class Partida:  #Clase para generar pantallas
         self.raqueta2 = Raqueta(780, ALTO//2)  #raqueta derecha
 
         #self.fuente = pg.font.SysFont("verdana", 30)  #SysFont toma fuentes del sistema   
-        self.fuente = pg.font.Font(FUENTE1,15)  #Font toma fuentes de un archivo que las contenga (en este caso la ruta esta en una variable), o None para que vaya con una predeterminada
-        self.fuenteTwo = pg.font.Font(FUENTE2,15)
+        self.fuente = pg.font.Font(FUENTE1,SIZE_FUENTE_1)  #Font toma fuentes de un archivo que las contenga (en este caso la ruta esta en una variable), o None para que vaya con una predeterminada
+        self.fuenteTwo = pg.font.Font(FUENTE2,SIZE_FUENTE_1)
         self.contadorDerecho = 0
         self.contadorIzquierdo = 0
         self.quienMarco = ""
@@ -35,7 +35,7 @@ class Partida:  #Clase para generar pantallas
         while self.game_over:
             
             #Obtener la tasa de refrescos en ms
-            self.valor_tasa = self.tasa_refresco.tick(600)  #Variable para controlar la velocidad entre fotogramas. A menor numero entre () mas lento es. No hace falta asignarlo a una variable si no se va a usar
+            self.valor_tasa = self.tasa_refresco.tick(VELOCIDAD_JUEGO)  #Variable para controlar la velocidad entre fotogramas. A menor numero entre () mas lento es. No hace falta asignarlo a una variable si no se va a usar
             #print(self.valor_tasa)   
 
             self.temporizador -= self.valor_tasa  
@@ -74,7 +74,7 @@ class Partida:  #Clase para generar pantallas
         pg.quit()
 
     def mostrar_linea_central(self):
-        for cont_linea in range(0,601,70):
+        for cont_linea in range(0,ALTO+1,70):
             pg.draw.line(self.pantalla_principal, COLOR_BLANCO, (ANCHO//2,cont_linea), (ANCHO//2,cont_linea+50), width=10)
 
     def mostrar_jugadores(self):                     
@@ -122,18 +122,18 @@ class Partida:  #Clase para generar pantallas
     
     def fijar_fondo(self):
         
-        if self.temporizador < 10000 and self.temporizador > 5000:
+        if self.temporizador < TIEMPO_LIMIT_1 and self.temporizador > TIEMPO_LIMIT_2:
             self.pantalla_principal.fill(FONDO_NARANJA)
-        elif self.temporizador < 5000:
+        elif self.temporizador < TIEMPO_LIMIT_2:
             self.pantalla_principal.fill(FONDO_ROJO)
         else: 
             self.pantalla_principal.fill(COLOR_PANTALLA)  #Color de pantalla   
         '''
         self.contadorFotograma += 1
 
-        if self.temporizador > 10000:
+        if self.temporizador > TIEMPO_LIMIT_1:
             self.contadorFotograma = 0
-        elif self.temporizador > 5000:
+        elif self.temporizador > TIEMPO_LIMIT_2:
             if self.contadorFotograma == 20:  #Achicar el numero hace que el parpadeo sea mas rapido
                 if self.colorFondo == COLOR_PANTALLA:
                     self.colorFondo = COLOR_NARANJA
@@ -158,9 +158,9 @@ class Menu:
         pg.display.set_caption('Menu')
         self.tasa_refresco = pg.time.Clock()
 
-        self.imagenFondo = pg.image.load("pongapp/images/fondomenu.jpg")  #Carga una imagen en una variable dandole el tipo Surface
+        self.imagenFondo = pg.image.load(IMGFONDO)  #Carga una imagen desde una ruta en una variable dandole el tipo Surface
 
-        self.fuente = pg.font.Font(FUENTE1,20)
+        self.fuente = pg.font.Font(FUENTE1,SIZE_FUENTE_2)
 
     def bucle_pantalla(self):
         game_over = True
@@ -170,16 +170,20 @@ class Menu:
                 if evento.type == pg.QUIT:
                     game_over = False
             
-            #Registra si se toca enter y retorna el str partida si lo hace para pasar a la pantalla siguiente en main.             
-            self.enter = pg.key.get_pressed()
-            if self.enter[pg.K_RETURN]:
+            #Registra si se toca enter y retorna el str partida si lo hace para pasar a la pantalla siguiente en main. Si toca r retorta record para ir a la pantalla da records en el main.              
+            self.botones = pg.key.get_pressed()
+            if self.botones[pg.K_RETURN]:
                 return "partida"
-            
+            elif self.botones[pg.K_r]:
+                return "record"
 
             self.pantalla_principal.blit(self.imagenFondo, (0,0))  #Carga la imagen de self.imagenFondo a la pantalla principal
 
-            texto_menu = self.fuente.render("Pulsa ENTER para jugar", True, COLOR_AMARILLO)
+            texto_menu = self.fuente.render("Pulsa ENTER para jugar", True, COLOR_AMARILLO)            
             self.pantalla_principal.blit(texto_menu, (200, ALTO//2))
+
+            texto_record = self.fuente.render("Pulsa R para mostrar records", True, COLOR_AMARILLO)            
+            self.pantalla_principal.blit(texto_record, (130, 400))
 
             pg.display.flip()
 
@@ -192,7 +196,7 @@ class Resultado:
         pg.display.set_caption('Resultado')
         self.tasa_refresco = pg.time.Clock()
 
-        self.fuenteResultado = pg.font.Font(FUENTE1, 10)
+        self.fuenteResultado = pg.font.Font(FUENTE1, SIZE_FUENTE_3)
         self.resultado = resultado
 
     def bucle_pantalla(self):
@@ -207,6 +211,36 @@ class Resultado:
             mostrarResultado = self.fuenteResultado.render(self.resultado, True, COLOR_GRANATE)
             self.pantalla_principal.blit(mostrarResultado, (100, ALTO//2))
 
+
+            pg.display.flip()
+
+        pg.quit()
+            
+class Record:    
+    def __init__(self):
+        pg.init()
+        self.pantalla_principal = pg.display.set_mode((ANCHO,ALTO))
+        pg.display.set_caption('Puntajes')
+        self.tasa_refresco = pg.time.Clock()       
+
+        self.fuenteRecord = pg.font.Font(FUENTE1,SIZE_FUENTE_2) 
+
+    def bucle_pantalla(self):
+        game_over = True
+        while game_over:
+            
+            for evento in pg.event.get():
+                if evento.type == pg.QUIT:
+                    game_over = False
+
+            self.botones = pg.key.get_pressed()
+            if self.botones[pg.K_RETURN]:
+                return "menu"
+            
+            
+            self.pantalla_principal.fill(COLOR_BLANCO)
+            texto = self.fuenteRecord.render("Mejores Puntajes", 0, COLOR_GRANATE)
+            self.pantalla_principal.blit(texto, (160, ALTO//2))
 
             pg.display.flip()
 
