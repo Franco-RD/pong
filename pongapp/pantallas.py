@@ -102,19 +102,19 @@ class Partida:  #Clase para generar pantallas
             self.game_over = False 
 
             if self.contadorDerecho > self.contadorIzquierdo:
-                return "El ganador es el jugador 1"
+                return f"Gana Jugador 1 - Resultado Jugador 1: {self.contadorDerecho} - Jugador 2: {self.contadorIzquierdo}"
             elif self.contadorDerecho < self.contadorIzquierdo:     
-                return "El ganador es el jugador 1"
+                return f"Gana Jugador 2 - Resultado Jugador 1: {self.contadorDerecho} - Jugador 2: {self.contadorIzquierdo}"
             else:
-                return "Empate"
+                return f"Empate - Resultado Jugador 1: {self.contadorDerecho} - Jugador 2: {self.contadorIzquierdo}"
 
         #Finalizacion de juego por puntos
         if self.contadorDerecho == 7:
             self.game_over = False  #Los game_over = False se puede sacar porque el return ya hace que se termine el metodo
-            return "El ganador es el jugador 1"
+            return f"Gana Jugador 1 - Resultado Jugador 1: {self.contadorDerecho} - Jugador 2: {self.contadorIzquierdo}"
         if self.contadorIzquierdo == 7:
             self.game_over = False
-            return "El ganador es el jugador 2"
+            return f"Gana Jugador 2 - Resultado Jugador 1: {self.contadorDerecho} - Jugador 2: {self.contadorIzquierdo}"
     
     def mostrar_temporizador(self):
         self.tiempo_juego = self.fuente.render(str(self.temporizador//1000), True, COLOR_ROJO)
@@ -192,7 +192,7 @@ class Resultado:
         pg.display.set_caption('Resultado')
         self.tasa_refresco = pg.time.Clock()
 
-        self.fuenteResultado = pg.font.Font(FUENTE1, 20)
+        self.fuenteResultado = pg.font.Font(FUENTE1, 10)
         self.resultado = resultado
 
     def bucle_pantalla(self):
@@ -204,8 +204,8 @@ class Resultado:
                     game_over = False
             
             self.pantalla_principal.fill(COLOR_BLANCO)
-            resultado = self.fuenteResultado.render(self.resultado, True, COLOR_GRANATE)
-            self.pantalla_principal.blit(resultado, (270, ALTO//2))
+            mostrarResultado = self.fuenteResultado.render(self.resultado, True, COLOR_GRANATE)
+            self.pantalla_principal.blit(mostrarResultado, (100, ALTO//2))
 
 
             pg.display.flip()

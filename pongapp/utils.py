@@ -16,7 +16,7 @@ COLOR_VERDE = (11,241,28)
 FONDO_ROJO = (250,18,10)
 FONDO_NARANJA = (250,103,12)
 
-TIEMPO_JUEGO = 20000
+TIEMPO_JUEGO = 1000
 
 FUENTE1 = "pongapp/fonts/PresStart2P.ttf"  #Rutas a las fuentes para poder utilizarlas en cualquier clase
 FUENTE2 = "pongapp/fonts/RussoOne.ttf"
