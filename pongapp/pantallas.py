@@ -79,7 +79,7 @@ class Partida:  #Clase para generar pantallas
 
     def mostrar_jugadores(self):                     
         jugador1 = self.fuente.render("Jugador 1", True, COLOR_AZUL)
-        jugador2 = self.fuente.render("Jugador 2", True, COLOR_NARANJA)        
+        jugador2 = self.fuente.render("Jugador 2", True, COLOR_VERDE)        
         self.pantalla_principal.blit(jugador1, (250,10))
         self.pantalla_principal.blit(jugador2, (420,10))
 
@@ -91,7 +91,7 @@ class Partida:  #Clase para generar pantallas
             self.contadorIzquierdo += 1    
 
         marcador1 = self.fuenteTwo.render(str(self.contadorDerecho), True, COLOR_AZUL)  #El .render  devuelve un objeto de tipo surface, que muestra un str seteado con demas parametros
-        marcador2 = self.fuenteTwo.render(str(self.contadorIzquierdo), True, COLOR_NARANJA)        
+        marcador2 = self.fuenteTwo.render(str(self.contadorIzquierdo), True, COLOR_VERDE)        
         self.pantalla_principal.blit(marcador1, (305,35))  #Blit muestra un objeto de tipo surface en una coordenada
         self.pantalla_principal.blit(marcador2, (475,35))
 
@@ -99,15 +99,22 @@ class Partida:  #Clase para generar pantallas
         #Finalizacion del juego por tiempo         
         if self.temporizador <= 0:
             print("Fin del juego")
-            self.game_over = False       
+            self.game_over = False 
+
+            if self.contadorDerecho > self.contadorIzquierdo:
+                return "El ganador es el jugador 1"
+            elif self.contadorDerecho < self.contadorIzquierdo:     
+                return "El ganador es el jugador 1"
+            else:
+                return "Empate"
 
         #Finalizacion de juego por puntos
         if self.contadorDerecho == 7:
-            self.game_over = False
-            print("El ganador es el jugador 1")
+            self.game_over = False  #Los game_over = False se puede sacar porque el return ya hace que se termine el metodo
+            return "El ganador es el jugador 1"
         if self.contadorIzquierdo == 7:
             self.game_over = False
-            print("El ganador es el jugador 2")
+            return "El ganador es el jugador 2"
     
     def mostrar_temporizador(self):
         self.tiempo_juego = self.fuente.render(str(self.temporizador//1000), True, COLOR_ROJO)
@@ -144,9 +151,9 @@ class Partida:  #Clase para generar pantallas
         return self.colorFondo
         '''
 
-class Menu:
-    pg.init()
+class Menu:    
     def __init__(self):
+        pg.init()
         self.pantalla_principal = pg.display.set_mode((ANCHO,ALTO))
         pg.display.set_caption('Menu')
         self.tasa_refresco = pg.time.Clock()
@@ -178,3 +185,30 @@ class Menu:
 
         pg.quit()
 
+class Resultado:    
+    def __init__(self, resultado):
+        pg.init()
+        self.pantalla_principal = pg.display.set_mode((ANCHO,ALTO))
+        pg.display.set_caption('Resultado')
+        self.tasa_refresco = pg.time.Clock()
+
+        self.fuenteResultado = pg.font.Font(FUENTE1, 20)
+        self.resultado = resultado
+
+    def bucle_pantalla(self):
+        game_over = True
+        while game_over:
+            
+            for evento in pg.event.get():
+                if evento.type == pg.QUIT:
+                    game_over = False
+            
+            self.pantalla_principal.fill(COLOR_BLANCO)
+            resultado = self.fuenteResultado.render(self.resultado, True, COLOR_GRANATE)
+            self.pantalla_principal.blit(resultado, (270, ALTO//2))
+
+
+            pg.display.flip()
+
+        pg.quit()
+            
