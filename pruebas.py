@@ -1,5 +1,5 @@
 from figura_class import Raqueta, Pelota
-from pantallas import Partida
+from pongapp.pantallas import Partida
 """
 objetoRaqueta = Raqueta(0, 500)
 
