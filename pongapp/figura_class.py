@@ -47,6 +47,7 @@ class Pelota:
         self.radio = radio
         self.vx = vx
         self.vy = vy
+        self.sonido = pg.mixer.Sound(SONIDO_PELOTA)
       
     
     def dibujar(self, surface):
@@ -102,3 +103,4 @@ class Pelota:
          for r in raquetas:
               if self.derecha >= r.izquierda and self.izquierda <= r.derecha and self.abajo >= r.arriba and self.arriba <= r.abajo:
                   self.vx *= -1
+                  pg.mixer.Sound.play(self.sonido)
