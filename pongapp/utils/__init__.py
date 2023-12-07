@@ -1,6 +1,6 @@
 import pygame as pg
 
-pg.init()
+pg.init()  #Se agrega aca y se saca de todas las declaraciones de pantalla para que siempre sea importado y funcione el bucle de pantallas de un juego luego de otro. 
 
 ANCHO = 800 #Las mayusculas son para referenciar las variables que no deben modificarse por el programa. Solo en este fichero hay que cambiar los valores
 ALTO = 600
@@ -20,7 +20,7 @@ COLOR_VERDE = (11,241,28)
 FONDO_ROJO = (250,18,10)
 FONDO_NARANJA = (250,103,12)
 
-TIEMPO_JUEGO = 2000
+TIEMPO_JUEGO = 5000
 VELOCIDAD_JUEGO = 600
 TIEMPO_LIMIT_1 = 10000
 TIEMPO_LIMIT_2 = 5000

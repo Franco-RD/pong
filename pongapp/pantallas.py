@@ -32,9 +32,14 @@ class Partida:  #Clase para generar pantalla de partida
 
         self.resultado_partida = ""
 
-    def bucle_fotograma(self):       
+    def bucle_fotograma(self):    
+        #Iniciar las variables al principio de la partida para reiniciar sus valores luego de cada juego
+        self.temporizador = TIEMPO_JUEGO   
+        self.tasa_refresco.tick()
+        self.contadorDerecho = 0
+        self.contadorIzquierdo = 0
 
-        while self.game_over:
+        while self.game_over and (self.contadorDerecho < 7 or self.contadorIzquierdo < 7) and self.temporizador > 0:
             
             #Obtener la tasa de refrescos en ms
             self.valor_tasa = self.tasa_refresco.tick(VELOCIDAD_JUEGO)  #Variable para controlar la velocidad entre fotogramas. A menor numero entre () mas lento es. No hace falta asignarlo a una variable si no se va a usar
@@ -45,7 +50,8 @@ class Partida:  #Clase para generar pantalla de partida
             #Captura de eventos
             for evento in pg.event.get():
                 if evento.type == pg.QUIT:
-                    self.game_over = False     
+                    #self.game_over = False     
+                    return True
             
 
             #Seteo de pantalla, dibujo y movimiento de objetos
@@ -102,7 +108,7 @@ class Partida:  #Clase para generar pantalla de partida
         #Finalizacion del juego por tiempo         
         if self.temporizador <= 0:
             print("Fin del juego")
-            self.game_over = False 
+            #self.game_over = False 
 
             if self.contadorDerecho > self.contadorIzquierdo:
                 self.resultado_partida = f"Gana Jugador 1 - Resultado Jugador 1: {self.contadorDerecho} - Jugador 2: {self.contadorIzquierdo}"
@@ -113,10 +119,10 @@ class Partida:  #Clase para generar pantalla de partida
 
         #Finalizacion de juego por puntos
         if self.contadorDerecho == 7:
-            self.game_over = False  #Los game_over = False se puede sacar porque el return ya hace que se termine el metodo
+            #self.game_over = False  
             self.resultado_partida = f"Gana Jugador 1 - Resultado Jugador 1: {self.contadorDerecho} - Jugador 2: {self.contadorIzquierdo}"
         if self.contadorIzquierdo == 7:
-            self.game_over = False
+            #self.game_over = False
             self.resultado_partida = f"Gana Jugador 2 - Resultado Jugador 1: {self.contadorDerecho} - Jugador 2: {self.contadorIzquierdo}"
     
     def mostrar_temporizador(self):
@@ -174,7 +180,9 @@ class Menu:
             
             for evento in pg.event.get():
                 if evento.type == pg.QUIT:
-                    game_over = False
+                    pg.mixer.Sound.stop(self.sonido)
+                    #game_over = False
+                    return True
             
             #Registra si se toca enter y retorna el str partida si lo hace para pasar a la pantalla siguiente en main. Si toca r retorta record para ir a la pantalla da records en el main.              
             self.botones = pg.key.get_pressed()
@@ -195,8 +203,6 @@ class Menu:
 
             pg.display.flip()
 
-        
-
 class Resultado:    
     def __init__(self):
         
@@ -213,13 +219,16 @@ class Resultado:
             
             for evento in pg.event.get():
                 if evento.type == pg.QUIT:
-                    game_over = False
+                    #game_over = False
+                    return False  #Con el return True lo que haria es que el boton de cerrar de la pantalla de resultados cerraria el juego. Como por ahora no podemos hacer que tocando enter vuelva
+                                  #al menu, ponemos que retorne False asi sigue el bucle del controlador. Esto quiere decir que no se puede cerrar el juego desde la pantalla de resultados.
             
-            botones = pg.key.get_pressed()
             """
+            botones = pg.key.get_pressed()            
             if botones[pg.K_RETURN]:                
-                return True
+                break
             """
+
             self.pantalla_principal.fill(COLOR_BLANCO)
             mostrarResultado = self.fuenteResultado.render(self.resultado, True, COLOR_GRANATE)
             self.pantalla_principal.blit(mostrarResultado, (100, ALTO//2))
@@ -246,7 +255,8 @@ class Record:
             
             for evento in pg.event.get():
                 if evento.type == pg.QUIT:
-                    game_over = False
+                    #game_over = False
+                    return True
 
             self.botones = pg.key.get_pressed()
             if self.botones[pg.K_RETURN]:
