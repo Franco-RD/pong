@@ -15,7 +15,9 @@ class Partida:  #Clase para generar pantalla de partida
         #Declaracion de objetos del juego
         self.pelota = Pelota(ANCHO//2, ALTO//2, COLOR_PELOTA)
         self.raqueta1 = Raqueta(0, ALTO//2)  #Raqueta izquierda
-        self.raqueta2 = Raqueta(780, ALTO//2)  #raqueta derecha
+        self.raqueta1._direccion = "izqda"
+        self.raqueta2 = Raqueta(ANCHO-30, ALTO//2)  #raqueta derecha
+        self.raqueta2._direccion = "drcha"
 
         #self.fuente = pg.font.SysFont("verdana", 30)  #SysFont toma fuentes del sistema   
         self.fuente = pg.font.Font(FUENTE1,SIZE_FUENTE_1)  #Font toma fuentes de un archivo que las contenga (en este caso la ruta esta en una variable), o None para que vaya con una predeterminada
@@ -81,12 +83,11 @@ class Partida:  #Clase para generar pantalla de partida
             
         return self.resultado_partida
         
-
     def mostrar_linea_central(self):
         for cont_linea in range(0,ALTO+1,70):
             pg.draw.line(self.pantalla_principal, COLOR_BLANCO, (ANCHO//2,cont_linea), (ANCHO//2,cont_linea+50), width=10)
 
-    def mostrar_jugadores(self):                     
+    def mostrar_jugadores(self):
         jugador1 = self.fuente.render("Jugador 1", True, COLOR_AZUL)
         jugador2 = self.fuente.render("Jugador 2", True, COLOR_VERDE)        
         self.pantalla_principal.blit(jugador1, (250,10))
@@ -105,26 +106,14 @@ class Partida:  #Clase para generar pantalla de partida
         self.pantalla_principal.blit(marcador2, (475,35))
 
     def finalizacion_de_juego(self):    
-        #Finalizacion del juego por tiempo         
-        if self.temporizador <= 0:
-            print("Fin del juego")
-            #self.game_over = False 
-
-            if self.contadorDerecho > self.contadorIzquierdo:
-                self.resultado_partida = f"Gana Jugador 1 - Resultado Jugador 1: {self.contadorDerecho} - Jugador 2: {self.contadorIzquierdo}"
-            elif self.contadorDerecho < self.contadorIzquierdo:     
-                self.resultado_partida = f"Gana Jugador 2 - Resultado Jugador 1: {self.contadorDerecho} - Jugador 2: {self.contadorIzquierdo}"
-            else:
-                self.resultado_partida = f"Empate - Resultado Jugador 1: {self.contadorDerecho} - Jugador 2: {self.contadorIzquierdo}"
-
-        #Finalizacion de juego por puntos
-        if self.contadorDerecho == 7:
-            #self.game_over = False  
+        #Como ahora estan como condicion los puntos y el temporizador en el while del bucle_fotograma, no hace falta programar por separado ambas instancias
+        if self.contadorDerecho > self.contadorIzquierdo:
             self.resultado_partida = f"Gana Jugador 1 - Resultado Jugador 1: {self.contadorDerecho} - Jugador 2: {self.contadorIzquierdo}"
-        if self.contadorIzquierdo == 7:
-            #self.game_over = False
+        elif self.contadorIzquierdo > self.contadorDerecho:   
             self.resultado_partida = f"Gana Jugador 2 - Resultado Jugador 1: {self.contadorDerecho} - Jugador 2: {self.contadorIzquierdo}"
-    
+        else: 
+            self.resultado_partida = f"Empate - Resultado Jugador 1: {self.contadorDerecho} - Jugador 2: {self.contadorIzquierdo}"
+
     def mostrar_temporizador(self):
         self.tiempo_juego = self.fuente.render(str(self.temporizador//1000), True, COLOR_ROJO)
         self.pantalla_principal.blit(self.tiempo_juego, (395,10))
@@ -175,7 +164,8 @@ class Menu:
 
     def bucle_pantalla(self):
         game_over = True
-        pg.mixer.Sound.play(self.sonido)
+        pg.mixer.Sound.set_volume(self.sonido, 0.05)  #Fija el volumen de un sonido 
+        pg.mixer.Sound.play(self.sonido)  #Reproduce el sonido
         while game_over:
             
             for evento in pg.event.get():
@@ -235,7 +225,6 @@ class Resultado:
 
 
             pg.display.flip()
-
             
     def cargar_resultado(self, resultado):
         self.resultado = resultado

@@ -32,6 +32,9 @@ SIZE_FUENTE_2 = 20
 SIZE_FUENTE_3 = 10
 
 IMGFONDO = "pongapp/images/fondomenu.jpg"
+IMGRAQUETADERECHA = "pongapp/images/raquetas/electric00_drcha.png"
+IMGRAQUETAIZQUIERDA = "pongapp/images/raquetas/electric00_izqda.png"
+IMGPELOTA = "pongapp/images/pelota/pelota.png"
 
 SONIDO_MENU = "pongapp/songs/menu.mp3"
 SONIDO_PELOTA = "pongapp/songs/pelota.mp3"

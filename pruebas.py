@@ -28,6 +28,21 @@ datosPersonales("Juan", "perez", 25, "algo")
 
 juego = Partida()
 juego.bucle_fotograma()
-"""
 
 musica = pg.mixer.music.load("C:\Users\Franco\Downloads\En este país ya nadie trabaja.mp3")
+"""
+file_imagenes = {'drcha':["electric00_drcha.png", "electric01_drcha.png", "electric02_drcha.png"], 
+                    'izqda':["electric00_izqda.png", "electric01_izqda.png", "electric02_izqda.png"]}
+
+lado = "drcha"
+
+def prueba(lado):
+    imagenprueba = {}
+    for lado in file_imagenes:
+        imagenprueba[lado] = []
+        for nombre_fichero in file_imagenes[lado]:
+            imagen = pg.image.load(f"pongapp/images/raquetas/{nombre_fichero}")
+            imagenprueba[lado].append(imagen)
+    return imagenprueba
+
+respuesta = prueba(lado)

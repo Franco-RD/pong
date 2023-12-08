@@ -9,11 +9,37 @@ class Raqueta:
         self.color = color
         self.w = w
         self.h = h
-    
-    def dibujar(self, surface):
-        pg.draw.rect(surface, self.color, (self.pos_x, self.pos_y-(self.h//2), self.w, self.h))  #Las divisiones en la posicion del draw son para que se dibuje en el medio de la pantalla
+        self.raqueta = None
+        self.file_imagenes = {'drcha':["electric00_drcha.png", "electric01_drcha.png", "electric02_drcha.png"], 
+                              'izqda':["electric00_izqda.png", "electric01_izqda.png", "electric02_izqda.png"]}
+        self.imagenes = self.cargar_imagenes()  #llamar al metodo que devuelve la inicializacion de imagenes
+        self._direccion = '' #variable para asignar direccion
+        self.imagen_activa = 0  #variable para indicar repeticion
 
-    def mover(self, tecaldo_arriba, teclado_abajo, y_max=ALTO, y_min=ALTO_MIN):        
+    def cargar_imagenes(self):
+        imagenprueba = {}
+        for lado in self.file_imagenes:
+            imagenprueba[lado] = []
+            for nombre_fichero in self.file_imagenes[lado]:
+                imagen = pg.image.load(f"pongapp/images/raquetas/{nombre_fichero}")
+                imagenprueba[lado].append(imagen)
+        return imagenprueba
+    
+    @property    #hace que la funcion llame una variable. Es un getter. En general las variables con un _ al principio significan que van a tener un setter y un getter (un metodo que la cargue y otro que la llame)
+    def direccion(self):
+        return self._direccion
+
+    def dibujar(self, surface):
+        #pg.draw.rect(surface, self.color, (self.pos_x, self.pos_y-(self.h//2), self.w, self.h))  #Las divisiones en la posicion del draw son para que se dibuje en el medio de la pantalla
+        #self.raqueta = pg.image.load(self.imagenes[lado])
+        #surface.blit(self.raqueta, (self.pos_x, self.pos_y-(self.h//2)))
+        surface.blit(self.imagenes[self.direccion][self.imagen_activa], (self.pos_x, self.pos_y-(self.h//2)))
+        self.imagen_activa += 1
+        if self.imagen_activa >= len(self.imagenes[self.direccion]):
+            self.imagen_activa = 0
+
+
+    def mover(self, tecaldo_arriba, teclado_abajo, y_max=ALTO, y_min=ALTO_MIN):
         estado_teclado = pg.key.get_pressed()      
 
         if estado_teclado[tecaldo_arriba] == True and self.pos_y >= y_min+(self.h//2): #Se suma y resta el h//2 ya que la posicion de los objetos se mide desde el centro del obj. Hay que sumarle la mitad del objeto para que los bordes sean los que marquen el limite
@@ -48,10 +74,12 @@ class Pelota:
         self.vx = vx
         self.vy = vy
         self.sonido = pg.mixer.Sound(SONIDO_PELOTA)
+        self.pelota = pg.image.load(IMGPELOTA)
       
     
     def dibujar(self, surface):
-        pg.draw.circle(surface, self.color, (self.pos_x, self.pos_y), self.radio)
+        #pg.draw.circle(surface, self.color, (self.pos_x, self.pos_y), self.radio)
+        surface.blit(self.pelota, (self.pos_x, self.pos_y))
 
     def mover(self, x_max=ANCHO, y_max=ALTO):
         self.pos_x += self.vx  #Esto hace que se mueva de manera automatica por los ejes
